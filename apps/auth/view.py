@@ -13,7 +13,7 @@ def index():
     return render_template("auth/test.html")
 @auth.route('/users')
 def users():
-    users=auth.query.all()
+    users=User_auth.query.all()
     return render_template('auth/test.html', users=users)
 @auth.route('/users/new',methods=["GET","POST"])
 def create_user():
@@ -23,6 +23,7 @@ def create_user():
             username=form.username.data,
             email=form.email.data,
             password=form.password.data,
+            number=form.number.data
         )
         db.session.add(user)
         db.session.commit()
@@ -33,7 +34,9 @@ def create_user():
 def edit_user(user_id):
     form=UserForm()
     user=User_auth.query.filter_by(id=user_id).first()
+    print('!!!!!!!!!',user)
     if form.validate_on_submit():
+        
         user.username=form.username.data
         user.email=form.email.data
         user.password=form.password.data
@@ -41,3 +44,9 @@ def edit_user(user_id):
         db.session.commit()
         return redirect(url_for('auth.users'))
     return render_template('auth/edit.html',user=user, form=form)
+@auth.route('/user/<user_id>/delete',methods=["POST"])
+def delete_user(user_id):
+    user=User_auth.query.filter_by(id=user_id).first()
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('auth.users'))
