@@ -7,7 +7,6 @@ class User(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     username=db.Column(db.String, index=True)
     email=db.Column(db.String, index=True)
-    number=db.Column(db.String, index=True)
     #userid=db.Column(db.String, index=True)
     password_hash=db.Column(db.String)
     create_at=db.Column(db.DateTime, default=datetime.now)

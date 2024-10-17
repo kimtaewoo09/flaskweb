@@ -22,8 +22,7 @@ def create_user():
         user=User_auth(
             username=form.username.data,
             email=form.email.data,
-            password=form.password.data,
-            number=form.number.data
+            password=form.password.data
         )
         db.session.add(user)
         db.session.commit()
