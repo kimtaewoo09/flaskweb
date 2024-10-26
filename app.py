@@ -29,4 +29,10 @@ def create_app(config_key):
     app.register_blueprint(crud_views.crud,url_prefix="/crud")
     from apps.auth import view as auth_view
     app.register_blueprint(auth_view.auth,url_prefix="/auth")
+    from apps.login import views as login_view
+    app.register_blueprint(login_view.login,url_prefix="/login")
+    from apps.board import views as board_view
+    app.register_blueprint(board_view.board,url_prefix="/board")
+
     return app
+

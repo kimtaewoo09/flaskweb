@@ -1,7 +1,8 @@
 from flask import Flask, Blueprint, render_template, redirect, url_for
-from apps.app import db
+from app import db
 from apps.crud.models import User
 from apps.crud.forms import UserForm
+from flask_login import login_required
 
 crud=Blueprint(
     "crud", __name__,
@@ -10,9 +11,11 @@ crud=Blueprint(
 )
 
 @crud.route("/")
+@login_required
 def index():
     return render_template("crud/index.html")
 @crud.route("/sql")
+@login_required
 def sql():
     '''user=User(
         username= '김태우',
@@ -29,6 +32,7 @@ def sql():
     return '콘솔 로그 확인'
 
 @crud.route('/users/new',methods=["GET","POST"])
+@login_required
 def create_user():
     form=UserForm()
     if form.validate_on_submit():
@@ -44,11 +48,13 @@ def create_user():
     return render_template("crud/create.html",form=form)
 
 @crud.route('/users')
+@login_required
 def users():
     users=User.query.all()
     return render_template('crud/index.html', users=users)
 
 @crud.route('/user/<user_id>',methods=["GET","POST"])
+@login_required
 def edit_user(user_id):
     form=UserForm()
     user=User.query.filter_by(id=user_id).first()
@@ -62,6 +68,7 @@ def edit_user(user_id):
     return render_template('crud/edit.html',user=user, form=form)
 
 @crud.route('/user/<user_id>/delete',methods=["POST"])
+@login_required
 def delete_user(user_id):
     user=User.query.filter_by(id=user_id).first()
     db.session.delete(user)
