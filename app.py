@@ -10,7 +10,7 @@ db=SQLAlchemy()
 csrf = CSRFProtect()
 
 login_manager=LoginManager()
-login_manager.login_view = "login.signup"
+login_manager.login_view = "acct.signup"
 login_manager.login_message=""
 
 def create_app(config_key):
@@ -29,10 +29,12 @@ def create_app(config_key):
     app.register_blueprint(crud_views.crud,url_prefix="/crud")
     from apps.auth import view as auth_view
     app.register_blueprint(auth_view.auth,url_prefix="/auth")
-    from apps.login import views as login_view
-    app.register_blueprint(login_view.login,url_prefix="/login")
+    from apps.acct import views as acct_view
+    app.register_blueprint(acct_view.acct,url_prefix="/acct")
     from apps.board import views as board_view
     app.register_blueprint(board_view.board,url_prefix="/board")
+    from apps.main import views as main_view
+    app.register_blueprint(main_view.main,url_prefix="/main")
 
     return app
 
