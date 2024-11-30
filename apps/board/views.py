@@ -1,8 +1,8 @@
-from flask import Flask, Blueprint, render_template, redirect, url_for
+from flask import Flask, Blueprint, render_template, redirect, url_for, flash, request
 from app import db
 from apps.board.models import Boards
 from apps.board.forms import BoardForm
-from flask_login import login_required
+from flask_login import login_required, current_user, login_required
 
 board=Blueprint(
     "board", __name__,
@@ -12,16 +12,33 @@ board=Blueprint(
 def index():
     users=Boards.query.all()
     return render_template("board/index.html")
-@board.route('/users/new',methods=["GET","POST"])
-def create_user(user_id):
-    form=BoardForm()
+
+@board.route('/boards')
+def boards():
+    posts=Boards.query.order_by(Boards.created_at.desc()).all()
+    return render_template('board/view.html', posts=posts)
+
+@board.route('/boards/write', methods=['GET','POST'])
+@login_required
+def write():
+    form = BoardForm()
     if form.validate_on_submit():
-        user=Boards(
-            title=form.title.data,
-            content=form.content.data,
+        new_post=Boards(
+            title = form.title.data,
+            content = form.content.data,
+            author_id = current_user.id
         )
-        db.session.add(user)
+
+        db.session.add(new_post)
         db.session.commit()
 
-        return redirect(url_for("auth.users"))
-    return render_template("auth/create.html",form=form)
+        flash('글이 성공적으로 작성되었습니다.','success')
+        return redirect(url_for('board.boards'))
+    return render_template('board/write.html', form=form)
+
+@board.route('/boards/<int:post_id>',methods=["GET","POST"])
+def view(post_id):
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    post=Boards.query.get_or_404(post_id) #게시글의 작성번호로 조회
+    return render_template('board/view_id.html',post=post)
+    

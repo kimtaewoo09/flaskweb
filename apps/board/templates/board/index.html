@@ -1,4 +1,4 @@
-{% extends "board/base.html" %}
+{% extends "main/base.html" %}
 {% block title %}게시판{% endblock %}
 
 {% block content %}
@@ -11,14 +11,6 @@
         <th>작성자명</th>
         <th>등록일</th>
     </tr>
-{%for i in board%}
-    <tr>
-        <td>{{ i.id }}</a></td>
-        <td><a href="{{url_for('crud.edit_user',user_id=i.id)}}"></a>{{i.title}}</td>
-        <td>{{i.username}}</td>
-        <td>{{i.created_at}}</td>
-    </tr>
-{% endfor %}
 </table>
 {% endblock %}
 </html>

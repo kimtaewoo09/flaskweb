@@ -13,6 +13,5 @@ class Boards(db.Model, UserMixin):
     views = db.Column(db.Integer, default=0)  # 조회수
     created_at = db.Column(db.DateTime, default=datetime.now)  # 생성 시각
     updated_at = db.Column(db.DateTime, onupdate=datetime.now) # 수정 시각
-
     author = db.relationship('User', backref=db.backref('posts', lazy=True))
     
