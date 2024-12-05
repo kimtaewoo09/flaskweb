@@ -44,7 +44,7 @@ def login():
         #사용자가 존재하고 비밀번호가 일치하면 로그인
         if user is not None and user.verify_password(form.password.data):
             login_user(user)
-            return redirect(url_for('crud.users'))
+            return redirect(url_for('auth.users'))
         flash("메일 주소 또는 비밀번호가 일치하지 않습니다.")
     return render_template("acct/login.html",form=form)
 
